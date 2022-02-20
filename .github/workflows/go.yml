@@ -1,0 +1,36 @@
+name: Go
+
+on:
+  push:
+    branches: [ dev ]
+  schedule:
+    - cron:  '*/30 * * * *'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Run app
+        run: API_URL=${{ secrets.API_URL }} SECRET_KEY=${{ secrets.SECRET_KEY }} go run main.go
+
+      - name: Commit files
+        run: |
+          git config --local user.email "read_on@126.com"
+          git config --local user.name "robot"
+          git add ./data/
+          git commit --amend --no-edit
+
+      - name: Push changes
+        uses:  ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.MY_GIT_TOKEN }}
+          branch: main
+          force: true
