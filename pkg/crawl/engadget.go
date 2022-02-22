@@ -28,8 +28,8 @@ func GetEngadgetNew() []entity.CrawlResult {
 	var results []entity.CrawlResult
 
 	document.Find("div[id='module-latest'] article[data-component='PostCard']").Each(func(i int, selection *goquery.Selection) {
-		url, boolUrl := selection.Find("div[data-component='PostInfo'] a").Attr("href")
-		title := selection.Find("div[data-component='PostInfo'] a").Text()
+		url, boolUrl := selection.Find("div[data-component='PostInfo'] h2 a").Attr("href")
+		title := selection.Find("div[data-component='PostInfo'] h2 a").Text()
 
 		if boolUrl {
 			results = append(results, entity.CrawlResult{
